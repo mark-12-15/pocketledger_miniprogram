@@ -29,7 +29,7 @@
       <view class="summary-divider"></view>
       <view class="summary-item">
         <text class="summary-label">结余</text>
-        <text class="summary-amount {{summary.income - summary.expense >= 0 ? 'income' : 'expense'}}">¥{{(summary.income - summary.expense).toFixed(2)}}</text>
+        <text class="summary-amount {{summary.balance >= 0 ? 'income' : 'expense'}}">¥{{summary.balanceStr}}</text>
       </view>
     </view>
   </view>

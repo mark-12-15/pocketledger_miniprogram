@@ -43,7 +43,18 @@ Page({
         app.request({ url: `/records/summary?period=${period}&date=${currentDate}` }),
         app.request({ url: `/records?period=${period}&date=${currentDate}` })
       ])
-      if (summaryRes.code === 0) this.setData({ summary: summaryRes.data })
+      if (summaryRes.code === 0) {
+        const { income, expense } = summaryRes.data
+        const balance = Number(income) - Number(expense)
+        this.setData({
+          summary: {
+            income: Number(income).toFixed(2),
+            expense: Number(expense).toFixed(2),
+            balance,
+            balanceStr: Math.abs(balance).toFixed(2)
+          }
+        })
+      }
       if (listRes.code === 0) {
         const records = listRes.data
         this.setData({ records, recordGroups: this._groupByDate(records) })
