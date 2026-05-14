@@ -17,7 +17,7 @@ const INCOME_CATEGORIES = [
 Page({
   data: {
     type: 2,           // 1=收入 2=支出
-    method: 'manual',  // manual | photo | file | voice
+    method: 'photo',   // photo | manual | voice | file（按优先级排序）
     amount: '',
     category: '',
     note: '',
@@ -31,7 +31,11 @@ Page({
     parseStatusClass: '',
     recording: false,
     recordId: null,
-    pollTimer: null
+    pollTimer: null,
+    // AI 解析确认
+    showConfirm: false,   // 是否显示确认表单
+    confirmData: null,    // AI 解析结果 { type, amount, category, note, happened_at }
+    confirming: false     // 确认提交中
   },
 
   onLoad() {
@@ -154,17 +158,23 @@ Page({
       count++
       if (count > 30) {
         clearInterval(timer)
-        this.setData({ parseMessage: '解析超时，可在账单列表查看', parseStatusClass: 'error' })
+        this.setData({ parseMessage: '解析超时，请手动录入', parseStatusClass: 'error' })
         return
       }
       try {
         const res = await app.request({ url: `/upload/status/${recordId}` })
         if (res.code === 0) {
-          const { parse_status } = res.data
+          const { parse_status, type, amount, category, note, happened_at } = res.data
           if (parse_status === 2) {
             clearInterval(timer)
-            this.setData({ parseMessage: '解析成功！已记录到账单', parseStatusClass: 'success' })
-            setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1500)
+            // 解析成功：展示确认表单，不自动入账
+            const confirmCategories = type === 1 ? INCOME_CATEGORIES : EXPENSE_CATEGORIES
+            this.setData({
+              parseMessage: '',
+              showConfirm: true,
+              confirmData: { type, amount: String(amount), category, note: note || '', happened_at },
+              categories: confirmCategories
+            })
           } else if (parse_status === 3) {
             clearInterval(timer)
             this.setData({ parseMessage: '解析失败，请手动录入', parseStatusClass: 'error' })
@@ -173,6 +183,62 @@ Page({
       } catch { /* ignore */ }
     }, 2000)
     this.setData({ pollTimer: timer })
+  },
+
+  // 确认表单字段更新
+  onConfirmAmountInput(e) {
+    this.setData({ 'confirmData.amount': e.detail.value })
+  },
+  onConfirmNoteInput(e) {
+    this.setData({ 'confirmData.note': e.detail.value })
+  },
+  onConfirmDateChange(e) {
+    this.setData({ 'confirmData.happened_at': e.detail.value })
+  },
+  onConfirmTypeChange(e) {
+    const type = Number(e.currentTarget.dataset.type)
+    this.setData({
+      'confirmData.type': type,
+      'confirmData.category': '',
+      categories: type === 2 ? EXPENSE_CATEGORIES : INCOME_CATEGORIES
+    })
+  },
+  onConfirmCategory(e) {
+    this.setData({ 'confirmData.category': e.currentTarget.dataset.name })
+  },
+
+  // 确认入账
+  async onConfirmRecord() {
+    const { confirmData, recordId } = this.data
+    if (!confirmData.amount || Number(confirmData.amount) <= 0) {
+      wx.showToast({ title: '请确认金额', icon: 'none' })
+      return
+    }
+    this.setData({ confirming: true })
+    try {
+      const res = await app.request({
+        url: `/records/${recordId}`,
+        method: 'PUT',
+        data: {
+          type: confirmData.type,
+          amount: Number(confirmData.amount),
+          category: confirmData.category || null,
+          note: confirmData.note || null,
+          happened_at: confirmData.happened_at,
+          parse_status: 4  // 用户已确认
+        }
+      })
+      if (res.code === 0) {
+        wx.showToast({ title: '已入账', icon: 'success' })
+        setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1000)
+      } else {
+        wx.showToast({ title: res.message || '入账失败', icon: 'none' })
+      }
+    } catch {
+      wx.showToast({ title: '网络错误', icon: 'none' })
+    } finally {
+      this.setData({ confirming: false })
+    }
   },
 
   // 语音录制

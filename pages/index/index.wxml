@@ -63,7 +63,8 @@
           </view>
           <view class="record-right">
             <text class="record-amount {{record.type === 1 ? 'income' : 'expense'}}">{{record.type === 1 ? '+' : '-'}}¥{{record.amount}}</text>
-            <text class="record-parse-tag" wx:if="{{record.parse_status === 1}}">解析中</text>
+            <text class="record-parse-tag pending" wx:if="{{record.parse_status === 1}}">解析中</text>
+            <text class="record-parse-tag confirm" wx:if="{{record.parse_status === 2}}">待确认</text>
           </view>
         </view>
       </view>

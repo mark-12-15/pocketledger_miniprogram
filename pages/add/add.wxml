@@ -6,12 +6,12 @@
     <view class="type-tab {{type === 1 ? 'active' : ''}}" bindtap="setType" data-type="1">收入</view>
   </view>
 
-  <!-- 录入方式 Sub-tab -->
+  <!-- 录入方式 Sub-tab（拍照 > 手动 > 语音 > 文件） -->
   <view class="method-bar">
-    <view class="method-tab {{method === 'manual' ? 'active' : ''}}" bindtap="setMethod" data-method="manual">✏️ 手动</view>
     <view class="method-tab {{method === 'photo' ? 'active' : ''}}" bindtap="setMethod" data-method="photo">📷 拍照</view>
-    <view class="method-tab {{method === 'file' ? 'active' : ''}}" bindtap="setMethod" data-method="file">📄 文件</view>
+    <view class="method-tab {{method === 'manual' ? 'active' : ''}}" bindtap="setMethod" data-method="manual">✏️ 手动</view>
     <view class="method-tab {{method === 'voice' ? 'active' : ''}}" bindtap="setMethod" data-method="voice">🎙️ 语音</view>
+    <view class="method-tab {{method === 'file' ? 'active' : ''}}" bindtap="setMethod" data-method="file">📄 文件</view>
   </view>
 
   <!-- 手动输入 -->
@@ -53,17 +53,74 @@
   </block>
 
   <!-- 拍照上传 -->
-  <view class="form-card upload-card" wx:if="{{method === 'photo'}}">
-    <view class="upload-area" bindtap="onChoosePhoto">
-      <view wx:if="{{!uploadFile}}" class="upload-placeholder">
-        <text class="upload-icon">📷</text>
-        <text class="upload-text">拍照或从相册选取</text>
-        <text class="upload-sub">支持票据、账单截图等</text>
+  <view wx:if="{{method === 'photo' && !showConfirm}}">
+    <view class="form-card upload-card">
+      <view class="upload-area" bindtap="onChoosePhoto">
+        <view wx:if="{{!uploadFile}}" class="upload-placeholder">
+          <text class="upload-icon">📷</text>
+          <text class="upload-text">拍照或从相册选取</text>
+          <text class="upload-sub">支持票据、账单截图等</text>
+        </view>
+        <image wx:if="{{uploadFile}}" src="{{uploadFile}}" mode="aspectFit" class="preview-image" />
       </view>
-      <image wx:if="{{uploadFile}}" src="{{uploadFile}}" mode="aspectFit" class="preview-image" />
+      <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage}}">{{parseMessage}}</view>
     </view>
-    <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage}}">{{parseMessage}}</view>
   </view>
+
+  <!-- AI 解析确认表单 -->
+  <block wx:if="{{showConfirm && confirmData}}">
+    <view class="confirm-banner">
+      <text class="confirm-banner-icon">✨</text>
+      <text class="confirm-banner-text">AI 已解析完成，请确认后入账</text>
+    </view>
+
+    <!-- 收入/支出切换（可修改） -->
+    <view class="confirm-type-bar">
+      <view class="confirm-type-opt {{confirmData.type === 2 ? 'active expense' : ''}}"
+            bindtap="onConfirmTypeChange" data-type="2">支出</view>
+      <view class="confirm-type-opt {{confirmData.type === 1 ? 'active income' : ''}}"
+            bindtap="onConfirmTypeChange" data-type="1">收入</view>
+    </view>
+
+    <!-- 金额（可修改） -->
+    <view class="amount-card">
+      <text class="amount-symbol">¥</text>
+      <input class="amount-input" type="digit" placeholder="0.00" placeholder-class="amount-placeholder"
+             value="{{confirmData.amount}}" bindinput="onConfirmAmountInput" />
+    </view>
+
+    <!-- 分类 + 备注 + 日期 -->
+    <view class="form-card">
+      <text class="field-label">分类</text>
+      <view class="category-grid">
+        <view wx:for="{{categories}}" wx:key="name"
+              class="category-item"
+              bindtap="onConfirmCategory" data-name="{{item.name}}">
+          <view class="category-icon-wrap {{confirmData.category === item.name ? 'active' : ''}}">
+            <text class="category-icon">{{item.icon}}</text>
+          </view>
+          <text class="category-name {{confirmData.category === item.name ? 'active' : ''}}">{{item.name}}</text>
+        </view>
+      </view>
+
+      <text class="field-label" style="margin-top:32rpx;">备注</text>
+      <input class="field-input" placeholder="选填" placeholder-class="field-placeholder"
+             value="{{confirmData.note}}" bindinput="onConfirmNoteInput" />
+
+      <text class="field-label" style="margin-top:24rpx;">日期</text>
+      <picker mode="date" value="{{confirmData.happened_at}}" bindchange="onConfirmDateChange">
+        <view class="field-input date-picker-val">{{confirmData.happened_at}} ›</view>
+      </picker>
+    </view>
+
+    <!-- 确认入账按钮 -->
+    <view class="submit-area">
+      <button class="btn-submit {{confirmData.type === 1 ? 'income' : 'expense'}}"
+              bindtap="onConfirmRecord" loading="{{confirming}}">
+        确认入账
+      </button>
+    </view>
+  </block>
 
   <!-- 文件上传（PDF） -->
   <view class="form-card upload-card" wx:if="{{method === 'file'}}">

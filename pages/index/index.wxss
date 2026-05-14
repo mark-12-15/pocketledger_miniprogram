@@ -239,11 +239,12 @@
 
 .record-parse-tag {
   font-size: 22rpx;
-  color: #F39C12;
-  background: #FEF9EE;
   padding: 4rpx 12rpx;
   border-radius: 8rpx;
 }
+
+.record-parse-tag.pending { color: #F39C12; background: #FEF9EE; }
+.record-parse-tag.confirm { color: #4A60F6; background: #EEF2FF; }
 
 .loading-tip {
   text-align: center;

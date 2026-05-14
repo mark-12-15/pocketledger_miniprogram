@@ -251,6 +251,53 @@
   padding: 0 40rpx;
 }
 
+/* ── AI 确认表单 ── */
+.confirm-banner {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin: 24rpx 32rpx 0;
+  padding: 24rpx 32rpx;
+  background: #EEF2FF;
+  border-radius: 20rpx;
+}
+
+.confirm-banner-icon { font-size: 32rpx; }
+
+.confirm-banner-text {
+  font-size: 26rpx;
+  color: #4A60F6;
+  font-weight: bold;
+}
+
+.confirm-type-bar {
+  display: flex;
+  margin: 24rpx 32rpx 0;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 8rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.03);
+}
+
+.confirm-type-opt {
+  flex: 1;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20rpx;
+  font-size: 30rpx;
+  color: #95A5A6;
+}
+
+.confirm-type-opt.active {
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+.confirm-type-opt.active.expense { background: #FF6B6B; }
+.confirm-type-opt.active.income  { background: #07C160; }
+
 /* ── 解析状态 ── */
 .parse-status {
   margin-top: 24rpx;
