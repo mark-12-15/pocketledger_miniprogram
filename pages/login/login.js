@@ -80,7 +80,8 @@ Page({
   },
 
   onWxLogin() {
-    // 由 getPhoneNumber open-type 触发，此函数作为兜底
+    // 模拟器中 open-type=getPhoneNumber 不触发 bindgetphonenumber，此处兜底
+    this._wxLoginOnly()
   },
 
   onPhoneInput(e) {
