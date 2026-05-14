@@ -91,7 +91,6 @@
         </view>
       </view>
 
-      <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage && parseStatusClass !== 'error'}}">{{parseMessage}}</view>
     </view>
   </view>
 
