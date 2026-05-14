@@ -145,13 +145,13 @@
     </view>
   </block>
 
-  <!-- 文件上传（PDF） -->
+  <!-- 文件上传（PDF / 图片） -->
   <view class="form-card upload-card" wx:if="{{method === 'file' && !showConfirm}}">
     <view class="upload-area" bindtap="onChooseFile">
       <view wx:if="{{!uploadFileName}}" class="upload-placeholder">
         <text class="upload-icon">📄</text>
-        <text class="upload-text">选择 PDF 文件</text>
-        <text class="upload-sub">支持银行账单、发票 PDF</text>
+        <text class="upload-text">选择账单文件</text>
+        <text class="upload-sub">支持 PDF、JPG、PNG 格式</text>
       </view>
       <view wx:if="{{uploadFileName}}" class="file-name-row">
         <text class="file-icon">📄</text>
@@ -163,21 +163,21 @@
 
   <!-- 语音输入 -->
   <view class="form-card upload-card" wx:if="{{method === 'voice' && !showConfirm}}">
-    <view class="voice-area" wx:if="{{supportSpeechRecognizer}}">
+    <view class="voice-area">
       <view class="voice-btn {{recording ? 'recording' : ''}}"
             bindtouchstart="onVoiceStart" bindtouchend="onVoiceEnd">
         <text class="voice-icon">🎙️</text>
         <text class="voice-tip">{{recording ? '松开结束' : '按住说话'}}</text>
       </view>
       <text class="voice-sub">说出金额和用途，如"昨天午饭花了35块"</text>
-      <view class="voice-recognized" wx:if="{{voiceText}}">
+      <view class="voice-recognized" wx:if="{{voiceText && !voiceFallback}}">
         <text class="voice-recognized-label">识别内容：</text>
         <text class="voice-recognized-text">{{voiceText}}</text>
       </view>
     </view>
-    <!-- 降级：文字输入（模拟器或不支持语音识别的设备） -->
-    <view class="voice-fallback" wx:else>
-      <text class="field-label">描述这笔收支</text>
+    <!-- 降级：文字输入（语音识别不可用时内联展开） -->
+    <view class="voice-fallback" wx:if="{{voiceFallback}}">
+      <text class="field-label">设备不支持语音识别，请直接输入</text>
       <textarea class="note-textarea" placeholder='如"昨天午饭花了35块"' placeholder-class="field-placeholder"
                 value="{{voiceText}}" bindinput="onVoiceTextInput" auto-height maxlength="200" />
     </view>
@@ -185,7 +185,7 @@
   </view>
 
   <!-- 语音降级提交按钮 -->
-  <view class="submit-area-inline" wx:if="{{method === 'voice' && !supportSpeechRecognizer && !showConfirm}}">
+  <view class="submit-area-inline" wx:if="{{method === 'voice' && voiceFallback && !showConfirm}}">
     <button class="btn-submit {{type === 1 ? 'income' : 'expense'}}"
             bindtap="onVoiceTextSubmit" disabled="{{!voiceText || !!parseMessage}}">
       AI 解析

@@ -31,6 +31,7 @@ Page({
     parseStatusClass: '',
     recording: false,
     voiceText: '',
+    voiceFallback: false,
     recordId: null,
     pollTimer: null,
     // AI 解析确认
@@ -167,16 +168,18 @@ Page({
     })
   },
 
-  // 选 PDF
+  // 选文件（PDF / 图片）
   onChooseFile() {
     wx.chooseMessageFile({
       count: 1,
       type: 'file',
-      extension: ['pdf'],
+      extension: ['pdf', 'jpg', 'jpeg', 'png'],
       success: (res) => {
         const file = res.tempFiles[0]
+        const ext = (file.name || '').split('.').pop().toLowerCase()
+        const fileType = ext === 'pdf' ? 'pdf' : 'image'
         this.setData({ uploadFileName: file.name })
-        this._uploadFile(file.path, 'pdf')
+        this._uploadFile(file.path, fileType)
       }
     })
   },
@@ -314,11 +317,15 @@ Page({
     }
   },
 
-  // 语音录制（使用微信内置 ASR 转写，转写完毕后发文字稿给后端解析）
+  // 语音录制（使用微信内置 ASR 转写，不可用时降级为文字输入）
   onVoiceStart() {
+    if (typeof wx.createSpeechRecognizer !== 'function') {
+      this.setData({ voiceFallback: true, voiceText: '', parseMessage: '', parseStatusClass: '' })
+      return
+    }
     const recognizer = wx.createSpeechRecognizer()
     this.recognizer = recognizer
-    this.setData({ recording: true, voiceText: '', parseMessage: '', parseStatusClass: '' })
+    this.setData({ recording: true, voiceText: '', voiceFallback: false, parseMessage: '', parseStatusClass: '' })
 
     recognizer.onRecognize(res => {
       this.setData({ voiceText: res.result })
