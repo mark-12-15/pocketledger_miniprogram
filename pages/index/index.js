@@ -19,7 +19,6 @@ Page({
       return
     }
     this.setData({ currentDate: formatDate(new Date()) })
-    this.refresh()
   },
 
   onShow() {
@@ -74,6 +73,7 @@ Page({
       if (!map[date]) map[date] = []
       map[date].push({
         ...r,
+        amount: Number(r.amount).toFixed(2),
         categoryIcon: CATEGORY_ICONS[r.category] || '💸'
       })
     })

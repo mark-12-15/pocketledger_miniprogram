@@ -37,19 +37,19 @@
 
     <!-- 阶段2：绑定手机号 -->
     <block wx:if="{{step === 'phone'}}">
-      <view class="phone-card">
-        <text class="phone-card-title">绑定手机号</text>
-        <text class="phone-card-sub">首次登录需绑定手机号，便于多端同步</text>
-        <view class="input-group">
-          <input class="input" type="number" maxlength="11" placeholder="请输入手机号" value="{{phone}}" bindinput="onPhoneInput" placeholder-class="input-placeholder" />
+      <view class="bind-card">
+        <text class="bind-card-title">绑定手机号</text>
+        <text class="bind-card-sub">首次登录需绑定手机号，便于多端同步</text>
+        <view class="form-area">
+          <input class="bind-input" type="number" maxlength="11" placeholder="请输入手机号" placeholder-class="bind-placeholder" value="{{phone}}" bindinput="onPhoneInput" />
+          <view class="code-row">
+            <input class="bind-input code-input" type="number" maxlength="6" placeholder="验证码" placeholder-class="bind-placeholder" value="{{code}}" bindinput="onCodeInput" />
+            <button class="btn-send-code" bindtap="onSendCode" disabled="{{codeCooldown > 0}}" loading="{{sendingCode}}">
+              {{codeCooldown > 0 ? codeCooldown + 's' : '获取验证码'}}
+            </button>
+          </view>
         </view>
-        <view class="input-group code-group">
-          <input class="input code-input" type="number" maxlength="6" placeholder="验证码" value="{{code}}" bindinput="onCodeInput" placeholder-class="input-placeholder" />
-          <button class="btn-send-code" bindtap="onSendCode" disabled="{{codeCooldown > 0}}" loading="{{sendingCode}}">
-            {{codeCooldown > 0 ? codeCooldown + 's' : '获取验证码'}}
-          </button>
-        </view>
-        <button class="btn-primary" bindtap="onBindPhone" loading="{{loading}}">完成绑定</button>
+        <button class="submit-btn" bindtap="onBindPhone" loading="{{loading}}">完成绑定</button>
       </view>
     </block>
 

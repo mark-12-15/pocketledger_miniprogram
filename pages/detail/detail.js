@@ -26,6 +26,7 @@ Page({
       if (res.code === 0) {
         const record = {
           ...res.data,
+          amount: Number(res.data.amount).toFixed(2),
           categoryIcon: CATEGORY_ICONS[res.data.category] || '💸'
         }
         this.setData({

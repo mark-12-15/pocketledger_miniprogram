@@ -31,6 +31,7 @@ App({
             wx.removeStorageSync('token')
             wx.removeStorageSync('userInfo')
             wx.reLaunch({ url: '/pages/login/login' })
+            reject(new Error('401'))
             return
           }
           resolve(res.data)
