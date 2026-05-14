@@ -281,7 +281,15 @@ Page({
       })
       if (res.code === 0) {
         wx.showToast({ title: '已入账', icon: 'success' })
-        setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1000)
+        setTimeout(() => {
+          this.setData({
+            showConfirm: false, confirmData: null,
+            uploadFile: '', uploadFileName: '',
+            parseMessage: '', parseStatusClass: '',
+            recordId: null
+          })
+          this._loadMonthSummary()
+        }, 800)
       } else {
         wx.showToast({ title: res.message || '入账失败', icon: 'none' })
       }
