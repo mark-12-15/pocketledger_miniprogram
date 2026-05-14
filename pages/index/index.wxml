@@ -1,75 +1,76 @@
-<view class="index-page">
-  <!-- 顶部统计卡片 -->
-  <view class="header-card">
-    <!-- 周期切换 -->
+<view class="ledger-page">
+
+  <!-- 顶部控制区 -->
+  <view class="header-area">
     <view class="period-tabs">
       <view class="period-tab {{period === 'month' ? 'active' : ''}}" bindtap="setPeriod" data-period="month">月</view>
       <view class="period-tab {{period === 'quarter' ? 'active' : ''}}" bindtap="setPeriod" data-period="quarter">季</view>
       <view class="period-tab {{period === 'year' ? 'active' : ''}}" bindtap="setPeriod" data-period="year">年</view>
     </view>
-
-    <!-- 日期导航 -->
     <view class="date-nav">
       <view class="nav-arrow" bindtap="prevDate">‹</view>
       <text class="date-label">{{dateLabel}}</text>
       <view class="nav-arrow {{isCurrentPeriod ? 'disabled' : ''}}" bindtap="nextDate">›</view>
     </view>
+  </view>
 
-    <!-- 收支统计 -->
-    <view class="summary-row">
-      <view class="summary-item">
-        <text class="summary-label">收入</text>
-        <text class="summary-amount income">¥{{summary.income}}</text>
-      </view>
-      <view class="summary-divider"></view>
-      <view class="summary-item">
-        <text class="summary-label">支出</text>
-        <text class="summary-amount expense">¥{{summary.expense}}</text>
-      </view>
-      <view class="summary-divider"></view>
-      <view class="summary-item">
-        <text class="summary-label">结余</text>
-        <text class="summary-amount {{summary.balance >= 0 ? 'income' : 'expense'}}">¥{{summary.balanceStr}}</text>
-      </view>
+  <!-- 数据汇总卡片（层叠在 header 下方） -->
+  <view class="summary-card">
+    <view class="summary-item">
+      <text class="summary-label">收入</text>
+      <text class="summary-amount income">¥{{summary.income}}</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="summary-label">支出</text>
+      <text class="summary-amount expense">¥{{summary.expense}}</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="summary-label">结余</text>
+      <text class="summary-amount balance">¥{{summary.balanceStr}}</text>
     </view>
   </view>
 
   <!-- 账单列表 -->
   <view class="list-section">
-    <view wx:if="{{records.length === 0 && !loading}}" class="empty">
-      <text class="empty-icon">📋</text>
+
+    <!-- 空状态 -->
+    <view wx:if="{{records.length === 0 && !loading}}" class="empty-state">
+      <view class="empty-icon-wrap">
+        <text class="empty-icon-text">￥</text>
+      </view>
       <text class="empty-text">暂无账单，去记一笔吧</text>
     </view>
 
     <view wx:for="{{recordGroups}}" wx:key="date" class="day-group">
       <view class="day-header">
         <text class="day-date">{{item.date}}</text>
-        <text class="day-summary">支出 ¥{{item.expense}} {{item.income > 0 ? '收入 ¥' + item.income : ''}}</text>
+        <text class="day-summary">支出 ¥{{item.expense}}{{item.income > 0 ? '  收入 ¥' + item.income : ''}}</text>
       </view>
-      <view class="card record-list">
+      <view class="record-card">
         <view wx:for="{{item.records}}" wx:key="id" wx:for-item="record"
               class="record-item {{record._last ? 'last' : ''}}"
               bindtap="onRecordTap" data-id="{{record.id}}">
           <view class="record-left">
-            <text class="record-category-icon">{{record.categoryIcon}}</text>
+            <view class="record-icon-wrap">
+              <text class="record-icon">{{record.categoryIcon}}</text>
+            </view>
             <view class="record-info">
               <text class="record-category">{{record.category || '其他'}}</text>
               <text class="record-note" wx:if="{{record.note}}">{{record.note}}</text>
             </view>
           </view>
           <view class="record-right">
-            <text class="record-amount {{record.type === 1 ? 'income' : 'expense'}}">
-              {{record.type === 1 ? '+' : '-'}}¥{{record.amount}}
-            </text>
-            <text class="record-parse" wx:if="{{record.parse_status === 1}}">解析中</text>
+            <text class="record-amount {{record.type === 1 ? 'income' : 'expense'}}">{{record.type === 1 ? '+' : '-'}}¥{{record.amount}}</text>
+            <text class="record-parse-tag" wx:if="{{record.parse_status === 1}}">解析中</text>
           </view>
         </view>
       </view>
     </view>
+
   </view>
 
-  <!-- 加载中 -->
-  <view class="loading-tip" wx:if="{{loading}}">
-    <text>加载中...</text>
-  </view>
+  <view class="loading-tip" wx:if="{{loading}}">加载中...</view>
+
 </view>

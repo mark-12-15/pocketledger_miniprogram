@@ -1,12 +1,13 @@
-<view class="add-page">
-  <!-- 收入/支出切换 -->
+<view class="record-page">
+
+  <!-- 顶部类型 Tab -->
   <view class="type-bar">
-    <view class="type-tab {{type === 2 ? 'active expense' : ''}}" bindtap="setType" data-type="2">支出</view>
-    <view class="type-tab {{type === 1 ? 'active income' : ''}}" bindtap="setType" data-type="1">收入</view>
+    <view class="type-tab {{type === 2 ? 'active' : ''}}" bindtap="setType" data-type="2">支出</view>
+    <view class="type-tab {{type === 1 ? 'active' : ''}}" bindtap="setType" data-type="1">收入</view>
   </view>
 
-  <!-- 输入方式选择 -->
-  <view class="input-method-bar">
+  <!-- 录入方式 Sub-tab -->
+  <view class="method-bar">
     <view class="method-tab {{method === 'manual' ? 'active' : ''}}" bindtap="setMethod" data-method="manual">✏️ 手动</view>
     <view class="method-tab {{method === 'photo' ? 'active' : ''}}" bindtap="setMethod" data-method="photo">📷 拍照</view>
     <view class="method-tab {{method === 'file' ? 'active' : ''}}" bindtap="setMethod" data-method="file">📄 文件</view>
@@ -14,45 +15,47 @@
   </view>
 
   <!-- 手动输入 -->
-  <view class="form-card" wx:if="{{method === 'manual'}}">
-    <!-- 金额 -->
-    <view class="amount-row">
+  <block wx:if="{{method === 'manual'}}">
+
+    <!-- 金额输入卡片 -->
+    <view class="amount-card">
       <text class="amount-symbol">¥</text>
-      <input class="amount-input" type="digit" placeholder="0.00" value="{{amount}}" bindinput="onAmountInput" focus="{{method === 'manual'}}" />
+      <input class="amount-input" type="digit" placeholder="0.00" placeholder-class="amount-placeholder"
+             value="{{amount}}" bindinput="onAmountInput" focus="{{true}}" />
     </view>
 
-    <!-- 分类 -->
-    <view class="field-row">
+    <!-- 分类网格 -->
+    <view class="form-card">
       <text class="field-label">分类</text>
       <view class="category-grid">
         <view wx:for="{{categories}}" wx:key="name"
               class="category-item {{category === item.name ? 'active' : ''}}"
               bindtap="setCategory" data-name="{{item.name}}">
-          <text>{{item.icon}}</text>
-          <text class="category-name">{{item.name}}</text>
+          <view class="category-icon-wrap {{category === item.name ? 'active' : ''}}">
+            <text class="category-icon">{{item.icon}}</text>
+          </view>
+          <text class="category-name {{category === item.name ? 'active' : ''}}">{{item.name}}</text>
         </view>
       </view>
-    </view>
 
-    <!-- 备注 -->
-    <view class="field-row">
-      <text class="field-label">备注</text>
-      <input class="note-input" placeholder="选填" value="{{note}}" bindinput="onNoteInput" />
-    </view>
+      <!-- 备注 -->
+      <text class="field-label" style="margin-top:32rpx;">备注</text>
+      <input class="field-input" placeholder="选填" placeholder-class="field-placeholder"
+             value="{{note}}" bindinput="onNoteInput" />
 
-    <!-- 日期 -->
-    <view class="field-row">
-      <text class="field-label">日期</text>
+      <!-- 日期 -->
+      <text class="field-label" style="margin-top:24rpx;">日期</text>
       <picker mode="date" value="{{happenedAt}}" bindchange="onDateChange">
-        <view class="date-picker">{{happenedAt}} ›</view>
+        <view class="field-input date-picker-val">{{happenedAt}} ›</view>
       </picker>
     </view>
-  </view>
+
+  </block>
 
   <!-- 拍照上传 -->
   <view class="form-card upload-card" wx:if="{{method === 'photo'}}">
     <view class="upload-area" bindtap="onChoosePhoto">
-      <view wx:if="{{!uploadFile}}">
+      <view wx:if="{{!uploadFile}}" class="upload-placeholder">
         <text class="upload-icon">📷</text>
         <text class="upload-text">拍照或从相册选取</text>
         <text class="upload-sub">支持票据、账单截图等</text>
@@ -65,7 +68,7 @@
   <!-- 文件上传（PDF） -->
   <view class="form-card upload-card" wx:if="{{method === 'file'}}">
     <view class="upload-area" bindtap="onChooseFile">
-      <view wx:if="{{!uploadFileName}}">
+      <view wx:if="{{!uploadFileName}}" class="upload-placeholder">
         <text class="upload-icon">📄</text>
         <text class="upload-text">选择 PDF 文件</text>
         <text class="upload-sub">支持银行账单、发票 PDF</text>
@@ -91,10 +94,12 @@
     <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage}}">{{parseMessage}}</view>
   </view>
 
-  <!-- 提交按钮 -->
+  <!-- 底部提交按钮 -->
   <view class="submit-area" wx:if="{{method === 'manual'}}">
-    <button class="btn-submit {{type === 1 ? 'income' : 'expense'}}" bindtap="onSubmit" loading="{{submitting}}">
+    <button class="btn-submit {{type === 1 ? 'income' : 'expense'}}"
+            bindtap="onSubmit" loading="{{submitting}}">
       记录{{type === 1 ? '收入' : '支出'}}
     </button>
   </view>
+
 </view>
