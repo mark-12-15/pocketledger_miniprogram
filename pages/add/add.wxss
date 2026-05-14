@@ -184,6 +184,18 @@
   align-items: center;
 }
 
+.note-textarea {
+  width: 100%;
+  min-height: 80rpx;
+  background: #F4F6F9;
+  border-radius: 16rpx;
+  padding: 20rpx 28rpx;
+  font-size: 28rpx;
+  color: #2C3E50;
+  box-sizing: border-box;
+  line-height: 1.5;
+}
+
 .field-placeholder { color: #BDC3C7; }
 
 .date-picker-val { color: #2C3E50; }
@@ -229,6 +241,91 @@
   margin-top: 16rpx;
 }
 
+/* ── 拍照/相册两按钮 ── */
+.upload-actions {
+  display: flex;
+  height: 400rpx;
+}
+
+.upload-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  background: #F8F9FA;
+  border-radius: 24rpx;
+}
+
+.upload-btn:active {
+  background: #EEF2FF;
+}
+
+.upload-btn-icon { font-size: 64rpx; }
+
+.upload-btn-text {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #2C3E50;
+}
+
+.upload-btn-divider {
+  width: 2rpx;
+  height: 120rpx;
+  background: #E8ECF0;
+  align-self: center;
+  margin: 0 4rpx;
+}
+
+/* ── 解析失败重传区域 ── */
+.reupload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400rpx;
+  gap: 16rpx;
+}
+
+.reupload-icon { font-size: 64rpx; }
+
+.reupload-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #E74C3C;
+}
+
+.reupload-sub {
+  font-size: 24rpx;
+  color: #95A5A6;
+}
+
+.reupload-actions {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 16rpx;
+}
+
+.btn-reupload {
+  padding: 18rpx 48rpx;
+  background: #4A60F6;
+  color: #FFFFFF;
+  border-radius: 48rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.btn-manual {
+  padding: 18rpx 48rpx;
+  background: #F4F6F9;
+  color: #7F8C8D;
+  border-radius: 48rpx;
+  font-size: 28rpx;
+}
+
+/* ── 图片预览 ── */
+.preview-wrap { width: 100%; }
 .preview-image { width: 100%; max-height: 480rpx; border-radius: 12rpx; }
 
 .file-name-row { display: flex; align-items: center; gap: 16rpx; }

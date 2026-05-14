@@ -45,8 +45,8 @@
 
       <!-- 备注 -->
       <text class="field-label" style="margin-top:32rpx;">备注</text>
-      <input class="field-input" placeholder="选填" placeholder-class="field-placeholder"
-             value="{{note}}" bindinput="onNoteInput" />
+      <textarea class="note-textarea" placeholder="选填" placeholder-class="field-placeholder"
+                value="{{note}}" bindinput="onNoteInput" auto-height maxlength="200" />
 
       <!-- 日期 -->
       <text class="field-label" style="margin-top:24rpx;">日期</text>
@@ -60,15 +60,38 @@
   <!-- 拍照上传 -->
   <view wx:if="{{method === 'photo' && !showConfirm}}">
     <view class="form-card upload-card">
-      <view class="upload-area" bindtap="onChoosePhoto">
-        <view wx:if="{{!uploadFile}}" class="upload-placeholder">
-          <text class="upload-icon">📷</text>
-          <text class="upload-text">拍照或从相册选取</text>
-          <text class="upload-sub">支持票据、账单截图等</text>
+
+      <!-- 未选图：显示两个操作按钮 -->
+      <view wx:if="{{!uploadFile && parseStatusClass !== 'error'}}" class="upload-actions">
+        <view class="upload-btn" bindtap="onTakePhoto">
+          <text class="upload-btn-icon">📷</text>
+          <text class="upload-btn-text">拍照</text>
         </view>
-        <image wx:if="{{uploadFile}}" src="{{uploadFile}}" mode="aspectFit" class="preview-image" />
+        <view class="upload-btn-divider"></view>
+        <view class="upload-btn" bindtap="onChooseAlbum">
+          <text class="upload-btn-icon">🖼️</text>
+          <text class="upload-btn-text">从相册选择</text>
+        </view>
       </view>
-      <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage}}">{{parseMessage}}</view>
+
+      <!-- 已选图：预览 + 解析中状态 -->
+      <view wx:if="{{uploadFile}}" class="preview-wrap">
+        <image src="{{uploadFile}}" mode="aspectFit" class="preview-image" />
+        <view class="parse-status pending" wx:if="{{parseMessage}}">{{parseMessage}}</view>
+      </view>
+
+      <!-- 解析失败：重新上传入口 -->
+      <view wx:if="{{parseStatusClass === 'error' && !uploadFile}}" class="reupload-area">
+        <text class="reupload-icon">❌</text>
+        <text class="reupload-title">解析失败</text>
+        <text class="reupload-sub">图片不清晰或内容无法识别</text>
+        <view class="reupload-actions">
+          <view class="btn-reupload" bindtap="onReupload">重新上传</view>
+          <view class="btn-manual" bindtap="setMethod" data-method="manual">手动录入</view>
+        </view>
+      </view>
+
+      <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage && parseStatusClass !== 'error'}}">{{parseMessage}}</view>
     </view>
   </view>
 
@@ -109,8 +132,8 @@
       </view>
 
       <text class="field-label" style="margin-top:32rpx;">备注</text>
-      <input class="field-input" placeholder="选填" placeholder-class="field-placeholder"
-             value="{{confirmData.note}}" bindinput="onConfirmNoteInput" />
+      <textarea class="note-textarea" placeholder="选填" placeholder-class="field-placeholder"
+                value="{{confirmData.note}}" bindinput="onConfirmNoteInput" auto-height maxlength="200" />
 
       <text class="field-label" style="margin-top:24rpx;">日期</text>
       <picker mode="date" value="{{confirmData.happened_at}}" bindchange="onConfirmDateChange">

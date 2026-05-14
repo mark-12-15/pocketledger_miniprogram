@@ -116,17 +116,45 @@ Page({
     }
   },
 
-  // 拍照
-  onChoosePhoto() {
+  // 拍照（直接调起相机）
+  onTakePhoto() {
     wx.chooseMedia({
       count: 1,
       mediaType: ['image'],
-      sourceType: ['album', 'camera'],
+      sourceType: ['camera'],
       success: (res) => {
         const path = res.tempFiles[0].tempFilePath
         this.setData({ uploadFile: path })
         this._uploadFile(path, 'image')
       }
+    })
+  },
+
+  // 从相册选择
+  onChooseAlbum() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album'],
+      success: (res) => {
+        const path = res.tempFiles[0].tempFilePath
+        this.setData({ uploadFile: path })
+        this._uploadFile(path, 'image')
+      }
+    })
+  },
+
+  // 重新上传（清空当前状态）
+  onReupload() {
+    if (this.data.pollTimer) clearInterval(this.data.pollTimer)
+    this.setData({
+      uploadFile: '',
+      parseMessage: '',
+      parseStatusClass: '',
+      recordId: null,
+      pollTimer: null,
+      showConfirm: false,
+      confirmData: null
     })
   },
 
@@ -189,17 +217,18 @@ Page({
           const { parse_status, type, amount, category, note, happened_at } = res.data
           if (parse_status === 2) {
             clearInterval(timer)
-            // 解析成功：展示确认表单，不自动入账
-            const confirmCategories = type === 1 ? INCOME_CATEGORIES : EXPENSE_CATEGORIES
+            // 用用户选的收/支类型，不采用 GLM 判断
+            const userType = this.data.type
+            const confirmCategories = userType === 1 ? INCOME_CATEGORIES : EXPENSE_CATEGORIES
             this.setData({
               parseMessage: '',
               showConfirm: true,
-              confirmData: { type, amount: String(amount), category, note: note || '', happened_at },
+              confirmData: { type: userType, amount: String(amount), category, note: note || '', happened_at },
               categories: confirmCategories
             })
           } else if (parse_status === 3) {
             clearInterval(timer)
-            this.setData({ parseMessage: '解析失败，请手动录入', parseStatusClass: 'error' })
+            this.setData({ uploadFile: '', parseMessage: '解析失败', parseStatusClass: 'error' })
           }
         }
       } catch { /* ignore */ }
