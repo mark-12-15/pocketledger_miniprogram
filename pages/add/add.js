@@ -180,6 +180,7 @@ Page({
       url: app.globalData.baseUrl + '/upload',
       filePath,
       name: 'file',
+      formData: { fileType },
       header: { Authorization: `Bearer ${token}` },
       success: (res) => {
         try {
