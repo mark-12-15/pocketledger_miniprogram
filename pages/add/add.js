@@ -2,16 +2,16 @@ const app = getApp()
 const { formatDate } = require('../../utils/util')
 
 const EXPENSE_CATEGORIES = [
-  { name: '餐饮', icon: '🍜' }, { name: '超市', icon: '🛒' }, { name: '外卖', icon: '🥡' },
-  { name: '交通', icon: '🚌' }, { name: '打车', icon: '🚕' }, { name: '加油', icon: '⛽' },
-  { name: '娱乐', icon: '🎮' }, { name: '电影', icon: '🎬' }, { name: '购物', icon: '🛍️' },
-  { name: '医疗', icon: '💊' }, { name: '健身', icon: '🏃' }, { name: '居家', icon: '🏠' },
-  { name: '通讯', icon: '📱' }, { name: '教育', icon: '📚' }, { name: '其他', icon: '💸' }
+  { name: '进货采购', icon: '📦' }, { name: '员工工资', icon: '👷' }, { name: '房租', icon: '🏪' },
+  { name: '水电网络', icon: '💡' }, { name: '快递物流', icon: '🚚' }, { name: '餐饮招待', icon: '🍽️' },
+  { name: '交通出行', icon: '🚗' }, { name: '广告推广', icon: '📣' }, { name: '税费手续费', icon: '🧾' },
+  { name: '设备维修', icon: '🔧' }, { name: '办公耗材', icon: '🖊️' }, { name: '还款', icon: '💳' },
+  { name: '其他支出', icon: '💸' }
 ]
 
 const INCOME_CATEGORIES = [
-  { name: '工资', icon: '💰' }, { name: '奖金', icon: '🎁' }, { name: '理财', icon: '📈' },
-  { name: '红包', icon: '🧧' }, { name: '转账', icon: '💸' }, { name: '其他', icon: '💵' }
+  { name: '销售收款', icon: '🛒' }, { name: '服务收款', icon: '🤝' }, { name: '预收定金', icon: '📋' },
+  { name: '退款收回', icon: '↩️' }, { name: '借款', icon: '🏦' }, { name: '其他收入', icon: '💰' }
 ]
 
 Page({
