@@ -140,8 +140,8 @@
       </picker>
     </view>
 
-    <!-- 确认入账按钮 -->
-    <view class="submit-area">
+    <!-- 确认入账按钮（inline，不用 fixed，避免滚动后触摸区域偏移） -->
+    <view class="submit-area-inline">
       <button class="btn-submit {{confirmData.type === 1 ? 'income' : 'expense'}}"
               bindtap="onConfirmRecord" loading="{{confirming}}">
         确认入账

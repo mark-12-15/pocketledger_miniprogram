@@ -280,16 +280,20 @@ Page({
         }
       })
       if (res.code === 0) {
-        wx.showToast({ title: '已入账', icon: 'success' })
-        setTimeout(() => {
-          this.setData({
-            showConfirm: false, confirmData: null,
-            uploadFile: '', uploadFileName: '',
-            parseMessage: '', parseStatusClass: '',
-            recordId: null
-          })
-          this._loadMonthSummary()
-        }, 800)
+        wx.showToast({
+          title: '已入账',
+          icon: 'success',
+          duration: 1500,
+          complete: () => {
+            this.setData({
+              showConfirm: false, confirmData: null,
+              uploadFile: '', uploadFileName: '',
+              parseMessage: '', parseStatusClass: '',
+              recordId: null
+            })
+            this._loadMonthSummary()
+          }
+        })
       } else {
         wx.showToast({ title: res.message || '入账失败', icon: 'none' })
       }

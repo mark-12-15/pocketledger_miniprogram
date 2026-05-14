@@ -436,7 +436,7 @@
 .parse-status.success { background: #F0FFF4; color: #07C160; }
 .parse-status.error   { background: #FFF0F0; color: #FF6B6B; }
 
-/* ── 底部提交按钮 ── */
+/* ── 底部提交按钮（手动录入，fixed） ── */
 .submit-area {
   position: fixed;
   bottom: env(safe-area-inset-bottom);
@@ -445,6 +445,13 @@
   display: flex;
   justify-content: center;
   padding-bottom: 120rpx;
+}
+
+/* ── 确认入账按钮（inline，跟随文档流，避免 fixed 触摸偏移） ── */
+.submit-area-inline {
+  display: flex;
+  justify-content: center;
+  padding: 32rpx 32rpx calc(env(safe-area-inset-bottom) + 48rpx);
 }
 
 .btn-submit {
