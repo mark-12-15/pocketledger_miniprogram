@@ -24,6 +24,7 @@ Page({
 
   onShow() {
     if (!app.globalData.token) return
+    if (!this.data.currentDate) return  // onLoad 还没跑完
     this.refresh()
   },
 
@@ -87,7 +88,7 @@ Page({
 
   setPeriod(e) {
     const period = e.currentTarget.dataset.period
-    this.setData({ period })
+    this.setData({ period, currentDate: formatDate(new Date()) })
     this.refresh()
   },
 

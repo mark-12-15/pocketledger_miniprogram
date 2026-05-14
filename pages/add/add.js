@@ -131,7 +131,7 @@ Page({
         try {
           const data = JSON.parse(res.data)
           if (data.code === 0) {
-            const recordId = data.data.recordId
+            const recordId = data.data.id
             this.setData({ recordId, parseMessage: '解析中，稍等...', parseStatusClass: 'pending' })
             this._pollParseStatus(recordId)
           } else {
