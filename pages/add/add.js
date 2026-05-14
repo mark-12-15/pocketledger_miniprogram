@@ -39,11 +39,15 @@ Page({
     confirming: false,
     // 本月财务上下文
     monthExpense: '0.00',
-    monthIncome: '0.00'
+    monthIncome: '0.00',
+    supportSpeechRecognizer: false
   },
 
   onLoad() {
-    this.setData({ happenedAt: formatDate(new Date()) })
+    this.setData({
+      happenedAt: formatDate(new Date()),
+      supportSpeechRecognizer: typeof wx.createSpeechRecognizer === 'function'
+    })
   },
 
   onShow() {
@@ -102,11 +106,15 @@ Page({
         data: { type, amount: Number(amount), category: category || null, note: note || null, happened_at: happenedAt }
       })
       if (res.code === 0) {
-        wx.showToast({ title: '记录成功', icon: 'success' })
-        setTimeout(() => {
-          this.setData({ amount: '', category: '', note: '' })
-          wx.switchTab({ url: '/pages/index/index' })
-        }, 1000)
+        wx.showToast({
+          title: '记录成功',
+          icon: 'success',
+          duration: 1500,
+          complete: () => {
+            this.setData({ amount: '', category: '', note: '', happenedAt: formatDate(new Date()) })
+            this._loadMonthSummary()
+          }
+        })
       } else {
         wx.showToast({ title: res.message || '记录失败', icon: 'none' })
       }
@@ -256,14 +264,6 @@ Page({
       'confirmData.notCurrentMonth': !val.startsWith(currentYM)
     })
   },
-  onConfirmTypeChange(e) {
-    const type = Number(e.currentTarget.dataset.type)
-    this.setData({
-      'confirmData.type': type,
-      'confirmData.category': '',
-      categories: type === 2 ? EXPENSE_CATEGORIES : INCOME_CATEGORIES
-    })
-  },
   onConfirmCategory(e) {
     this.setData({ 'confirmData.category': e.currentTarget.dataset.name })
   },
@@ -281,7 +281,7 @@ Page({
         url: `/records/${recordId}`,
         method: 'PUT',
         data: {
-          type: confirmData.type,
+          type: this.data.type,
           amount: Number(confirmData.amount),
           category: confirmData.category || null,
           note: confirmData.note || null,
@@ -345,6 +345,16 @@ Page({
     if (!this.data.recording) return
     this.recognizer && this.recognizer.stop()
     this.setData({ recording: false })
+  },
+
+  onVoiceTextInput(e) {
+    this.setData({ voiceText: e.detail.value })
+  },
+
+  onVoiceTextSubmit() {
+    const text = this.data.voiceText.trim()
+    if (!text) return
+    this._submitVoiceText(text)
   },
 
   async _submitVoiceText(text) {

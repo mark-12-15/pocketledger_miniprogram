@@ -376,6 +376,12 @@
   padding: 0 40rpx;
 }
 
+/* ── 语音降级文字输入 ── */
+.voice-fallback {
+  width: 100%;
+  padding: 8rpx 0;
+}
+
 /* ── 语音识别实时文字 ── */
 .voice-recognized {
   margin-top: 24rpx;

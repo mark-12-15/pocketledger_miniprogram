@@ -101,13 +101,6 @@
       <text class="confirm-banner-text">AI 已解析完成，请确认后入账</text>
     </view>
 
-    <!-- 收入/支出切换（可修改） -->
-    <view class="confirm-type-bar">
-      <view class="confirm-type-opt {{confirmData.type === 2 ? 'active expense' : ''}}"
-            bindtap="onConfirmTypeChange" data-type="2">支出</view>
-      <view class="confirm-type-opt {{confirmData.type === 1 ? 'active income' : ''}}"
-            bindtap="onConfirmTypeChange" data-type="1">收入</view>
-    </view>
 
     <!-- 金额（可修改） -->
     <view class="amount-card">
@@ -145,7 +138,7 @@
 
     <!-- 确认入账按钮（inline，不用 fixed，避免滚动后触摸区域偏移） -->
     <view class="submit-area-inline">
-      <button class="btn-submit {{confirmData.type === 1 ? 'income' : 'expense'}}"
+      <button class="btn-submit {{type === 1 ? 'income' : 'expense'}}"
               bindtap="onConfirmRecord" loading="{{confirming}}">
         确认入账
       </button>
@@ -153,7 +146,7 @@
   </block>
 
   <!-- 文件上传（PDF） -->
-  <view class="form-card upload-card" wx:if="{{method === 'file'}}">
+  <view class="form-card upload-card" wx:if="{{method === 'file' && !showConfirm}}">
     <view class="upload-area" bindtap="onChooseFile">
       <view wx:if="{{!uploadFileName}}" class="upload-placeholder">
         <text class="upload-icon">📄</text>
@@ -169,8 +162,8 @@
   </view>
 
   <!-- 语音输入 -->
-  <view class="form-card upload-card" wx:if="{{method === 'voice'}}">
-    <view class="voice-area">
+  <view class="form-card upload-card" wx:if="{{method === 'voice' && !showConfirm}}">
+    <view class="voice-area" wx:if="{{supportSpeechRecognizer}}">
       <view class="voice-btn {{recording ? 'recording' : ''}}"
             bindtouchstart="onVoiceStart" bindtouchend="onVoiceEnd">
         <text class="voice-icon">🎙️</text>
@@ -182,11 +175,25 @@
         <text class="voice-recognized-text">{{voiceText}}</text>
       </view>
     </view>
+    <!-- 降级：文字输入（模拟器或不支持语音识别的设备） -->
+    <view class="voice-fallback" wx:else>
+      <text class="field-label">描述这笔收支</text>
+      <textarea class="note-textarea" placeholder='如"昨天午饭花了35块"' placeholder-class="field-placeholder"
+                value="{{voiceText}}" bindinput="onVoiceTextInput" auto-height maxlength="200" />
+    </view>
     <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage}}">{{parseMessage}}</view>
   </view>
 
-  <!-- 底部提交按钮 -->
-  <view class="submit-area" wx:if="{{method === 'manual'}}">
+  <!-- 语音降级提交按钮 -->
+  <view class="submit-area-inline" wx:if="{{method === 'voice' && !supportSpeechRecognizer && !showConfirm}}">
+    <button class="btn-submit {{type === 1 ? 'income' : 'expense'}}"
+            bindtap="onVoiceTextSubmit" disabled="{{!voiceText || !!parseMessage}}">
+      AI 解析
+    </button>
+  </view>
+
+  <!-- 手动录入提交按钮 -->
+  <view class="submit-area-inline" wx:if="{{method === 'manual'}}">
     <button class="btn-submit {{type === 1 ? 'income' : 'expense'}}"
             bindtap="onSubmit" loading="{{submitting}}">
       记录{{type === 1 ? '收入' : '支出'}}
