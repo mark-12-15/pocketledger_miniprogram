@@ -13,9 +13,9 @@ Page({
   },
 
   onLoad() {
-    // 已登录直接跳首页
+    // 已登录直接跳记账页
     if (app.globalData.token) {
-      wx.reLaunch({ url: '/pages/index/index' })
+      wx.reLaunch({ url: '/pages/add/add' })
     }
   },
 
@@ -171,6 +171,6 @@ Page({
     app.globalData.userInfo = user
     wx.setStorageSync('token', token)
     wx.setStorageSync('userInfo', user)
-    wx.reLaunch({ url: '/pages/index/index' })
+    wx.reLaunch({ url: '/pages/add/add' })
   }
 })
