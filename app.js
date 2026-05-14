@@ -2,7 +2,7 @@ App({
   globalData: {
     token: '',
     userInfo: null,
-    baseUrl: 'http://localhost:3000'
+    baseUrl: 'https://pocket-ledger-api-257743-7-1258525494.sh.run.tcloudbase.com'
   },
 
   onLaunch() {
