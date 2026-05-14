@@ -63,12 +63,14 @@ Page({
         method: 'POST',
         data: { code: loginRes.code }
       })
-      if (res.code === 0 && res.data.token) {
-        // 已绑定手机号，直接登录
-        this._saveAndJump(res.data.token, res.data.user)
-      } else if (res.code === 0 && res.data.needBind) {
-        // 需要绑定手机号
-        this.setData({ step: 'phone', tempToken: res.data.tempToken })
+      if (res.code === 0) {
+        if (res.data.user && res.data.user.phone) {
+          // 已绑定手机号，直接登录
+          this._saveAndJump(res.data.token, res.data.user)
+        } else {
+          // 新用户或未绑定手机号，进入绑定流程
+          this.setData({ step: 'phone', tempToken: res.data.token })
+        }
       } else {
         wx.showToast({ title: res.message || '登录失败', icon: 'none' })
       }
