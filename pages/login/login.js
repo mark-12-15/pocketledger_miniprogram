@@ -121,7 +121,7 @@ Page({
   },
 
   _startCooldown() {
-    this.setData({ codeCooldown: 60 })
+    this.setData({ codeCooldown: 10 })
     const timer = setInterval(() => {
       const c = this.data.codeCooldown - 1
       if (c <= 0) {

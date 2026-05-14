@@ -1,62 +1,148 @@
-.login-page {
+/* ── 整体容器 ── */
+.container {
   min-height: 100vh;
-  background: linear-gradient(160deg, #4F46E5 0%, #7C3AED 100%);
-  display: flex;
-  flex-direction: column;
-}
-
-.login-bg {
-  height: 40vh;
-}
-
-.login-content {
-  flex: 1;
-  background: #f5f5f5;
-  border-radius: 48rpx 48rpx 0 0;
-  padding: 60rpx 48rpx 80rpx;
-}
-
-.logo-area {
+  background: #F7F9FC;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 60rpx;
+  position: relative;
+  overflow: hidden;
 }
 
-.logo-icon {
-  font-size: 96rpx;
+/* ── 背景氛围圆 ── */
+.bg-blob {
+  position: absolute;
+  width: 500rpx;
+  height: 500rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, #E0EAFC, #CFDEF3);
+  filter: blur(80px);
+  z-index: 0;
+}
+.bg-blob-tl { top: -160rpx; left: -160rpx; }
+.bg-blob-br { bottom: -160rpx; right: -160rpx; }
+
+/* ── 品牌展示区 ── */
+.brand-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  padding-top: 80rpx;
 }
 
-.logo-title {
-  font-size: 48rpx;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-top: 16rpx;
+.logo-box {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 40rpx;
+  background: #FFFFFF;
+  box-shadow: 0 20rpx 40rpx rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.logo-sub {
-  font-size: 26rpx;
-  color: #999;
-  margin-top: 12rpx;
+.logo-text {
+  font-size: 80rpx;
+  font-weight: bold;
+  color: #4A60F6;
+  line-height: 1;
 }
 
-.form-card {
-  background: #fff;
-  border-radius: 24rpx;
+.brand-title {
+  font-size: 56rpx;
+  font-weight: bold;
+  color: #2C3E50;
+  margin-top: 48rpx;
+}
+
+.brand-subtitle {
+  font-size: 28rpx;
+  color: #95A5A6;
+  margin-top: 20rpx;
+  letter-spacing: 2rpx;
+}
+
+/* ── 操作区 ── */
+.action-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 120rpx;
+  z-index: 1;
+  margin-bottom: 10vh;
+}
+
+/* ── 微信登录按钮 ── */
+.login-btn {
+  width: 600rpx;
+  height: 100rpx;
+  background: #07C160;
+  border-radius: 50rpx;
+  box-shadow: 0 16rpx 32rpx rgba(7,193,96,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  border: none;
+  padding: 0;
+}
+.login-btn::after { border: none; }
+
+.wx-icon-dot {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  flex-shrink: 0;
+}
+
+.login-btn-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+/* ── 协议 ── */
+.terms {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 40rpx;
+}
+.terms-text {
+  font-size: 24rpx;
+  color: #BDC3C7;
+}
+.terms-link {
+  font-size: 24rpx;
+  color: #4A60F6;
+}
+
+/* ── 绑定手机号卡片 ── */
+.phone-card {
+  width: 680rpx;
+  background: #FFFFFF;
+  border-radius: 32rpx;
   padding: 48rpx 40rpx;
-  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.08);
+  box-shadow: 0 8rpx 40rpx rgba(0,0,0,0.06);
 }
 
-.form-title {
+.phone-card-title {
   font-size: 36rpx;
-  font-weight: 700;
-  color: #1a1a1a;
+  font-weight: bold;
+  color: #2C3E50;
+  display: block;
   margin-bottom: 8rpx;
 }
 
-.form-sub {
+.phone-card-sub {
   font-size: 24rpx;
-  color: #999;
+  color: #95A5A6;
+  display: block;
   margin-bottom: 40rpx;
 }
 
@@ -67,11 +153,16 @@
 .input {
   width: 100%;
   height: 88rpx;
-  background: #f8f8f8;
+  background: #F7F9FC;
   border-radius: 16rpx;
   padding: 0 28rpx;
   font-size: 30rpx;
   box-sizing: border-box;
+  color: #2C3E50;
+}
+
+.input-placeholder {
+  color: #BDC3C7;
 }
 
 .code-group {
@@ -88,7 +179,7 @@
   width: 220rpx;
   height: 88rpx;
   background: #EEF2FF;
-  color: #4F46E5;
+  color: #4A60F6;
   border-radius: 16rpx;
   font-size: 26rpx;
   font-weight: 600;
@@ -99,34 +190,12 @@
   flex-shrink: 0;
   padding: 0;
 }
-
 .btn-send-code::after { border: none; }
-
-.btn-wx {
-  width: 100%;
-  height: 96rpx;
-  background: #07C160;
-  color: #fff;
-  border-radius: 48rpx;
-  font-size: 32rpx;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12rpx;
-  border: none;
-}
-
-.btn-wx::after { border: none; }
-
-.btn-wx-icon {
-  font-size: 32rpx;
-}
 
 .btn-primary {
   width: 100%;
   height: 88rpx;
-  background: #4F46E5;
+  background: #4A60F6;
   color: #fff;
   border-radius: 44rpx;
   font-size: 32rpx;
@@ -136,6 +205,6 @@
   justify-content: center;
   border: none;
   margin-top: 16rpx;
+  box-shadow: 0 12rpx 24rpx rgba(74,96,246,0.25);
 }
-
 .btn-primary::after { border: none; }

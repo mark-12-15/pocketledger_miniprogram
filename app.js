@@ -2,7 +2,6 @@ App({
   globalData: {
     token: '',
     userInfo: null,
-    // 本地调试用 http://localhost:3000，上线改回云托管地址
     baseUrl: 'http://localhost:3000'
   },
 
