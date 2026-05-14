@@ -1,0 +1,100 @@
+<view class="add-page">
+  <!-- 收入/支出切换 -->
+  <view class="type-bar">
+    <view class="type-tab {{type === 2 ? 'active expense' : ''}}" bindtap="setType" data-type="2">支出</view>
+    <view class="type-tab {{type === 1 ? 'active income' : ''}}" bindtap="setType" data-type="1">收入</view>
+  </view>
+
+  <!-- 输入方式选择 -->
+  <view class="input-method-bar">
+    <view class="method-tab {{method === 'manual' ? 'active' : ''}}" bindtap="setMethod" data-method="manual">✏️ 手动</view>
+    <view class="method-tab {{method === 'photo' ? 'active' : ''}}" bindtap="setMethod" data-method="photo">📷 拍照</view>
+    <view class="method-tab {{method === 'file' ? 'active' : ''}}" bindtap="setMethod" data-method="file">📄 文件</view>
+    <view class="method-tab {{method === 'voice' ? 'active' : ''}}" bindtap="setMethod" data-method="voice">🎙️ 语音</view>
+  </view>
+
+  <!-- 手动输入 -->
+  <view class="form-card" wx:if="{{method === 'manual'}}">
+    <!-- 金额 -->
+    <view class="amount-row">
+      <text class="amount-symbol">¥</text>
+      <input class="amount-input" type="digit" placeholder="0.00" value="{{amount}}" bindinput="onAmountInput" focus="{{method === 'manual'}}" />
+    </view>
+
+    <!-- 分类 -->
+    <view class="field-row">
+      <text class="field-label">分类</text>
+      <view class="category-grid">
+        <view wx:for="{{categories}}" wx:key="name"
+              class="category-item {{category === item.name ? 'active' : ''}}"
+              bindtap="setCategory" data-name="{{item.name}}">
+          <text>{{item.icon}}</text>
+          <text class="category-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="field-row">
+      <text class="field-label">备注</text>
+      <input class="note-input" placeholder="选填" value="{{note}}" bindinput="onNoteInput" />
+    </view>
+
+    <!-- 日期 -->
+    <view class="field-row">
+      <text class="field-label">日期</text>
+      <picker mode="date" value="{{happenedAt}}" bindchange="onDateChange">
+        <view class="date-picker">{{happenedAt}} ›</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 拍照上传 -->
+  <view class="form-card upload-card" wx:if="{{method === 'photo'}}">
+    <view class="upload-area" bindtap="onChoosePhoto">
+      <view wx:if="{{!uploadFile}}">
+        <text class="upload-icon">📷</text>
+        <text class="upload-text">拍照或从相册选取</text>
+        <text class="upload-sub">支持票据、账单截图等</text>
+      </view>
+      <image wx:if="{{uploadFile}}" src="{{uploadFile}}" mode="aspectFit" class="preview-image" />
+    </view>
+    <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage}}">{{parseMessage}}</view>
+  </view>
+
+  <!-- 文件上传（PDF） -->
+  <view class="form-card upload-card" wx:if="{{method === 'file'}}">
+    <view class="upload-area" bindtap="onChooseFile">
+      <view wx:if="{{!uploadFileName}}">
+        <text class="upload-icon">📄</text>
+        <text class="upload-text">选择 PDF 文件</text>
+        <text class="upload-sub">支持银行账单、发票 PDF</text>
+      </view>
+      <view wx:if="{{uploadFileName}}" class="file-name-row">
+        <text class="file-icon">📄</text>
+        <text class="file-name">{{uploadFileName}}</text>
+      </view>
+    </view>
+    <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage}}">{{parseMessage}}</view>
+  </view>
+
+  <!-- 语音输入 -->
+  <view class="form-card upload-card" wx:if="{{method === 'voice'}}">
+    <view class="voice-area">
+      <view class="voice-btn {{recording ? 'recording' : ''}}"
+            bindtouchstart="onVoiceStart" bindtouchend="onVoiceEnd">
+        <text class="voice-icon">🎙️</text>
+        <text class="voice-tip">{{recording ? '松开结束' : '按住说话'}}</text>
+      </view>
+      <text class="voice-sub">说出金额和用途，如"午饭花了35块"</text>
+    </view>
+    <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage}}">{{parseMessage}}</view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-area" wx:if="{{method === 'manual'}}">
+    <button class="btn-submit {{type === 1 ? 'income' : 'expense'}}" bindtap="onSubmit" loading="{{submitting}}">
+      记录{{type === 1 ? '收入' : '支出'}}
+    </button>
+  </view>
+</view>

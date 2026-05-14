@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "随手账本",
+  "navigationBarBackgroundColor": "#4F46E5",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#f5f5f5"
+}

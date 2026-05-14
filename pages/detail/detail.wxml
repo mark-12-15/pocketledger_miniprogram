@@ -1,0 +1,76 @@
+<view class="detail-page" wx:if="{{record}}">
+  <!-- 金额头部 -->
+  <view class="amount-header {{record.type === 1 ? 'income-bg' : 'expense-bg'}}">
+    <text class="amount-label">{{record.type === 1 ? '收入' : '支出'}}</text>
+    <text class="amount-value">¥{{record.amount}}</text>
+  </view>
+
+  <!-- 详情卡片 -->
+  <view class="detail-card card" wx:if="{{!editing}}">
+    <view class="detail-row">
+      <text class="detail-key">分类</text>
+      <text class="detail-val">{{record.categoryIcon}} {{record.category || '其他'}}</text>
+    </view>
+    <view class="detail-row" wx:if="{{record.note}}">
+      <text class="detail-key">备注</text>
+      <text class="detail-val">{{record.note}}</text>
+    </view>
+    <view class="detail-row">
+      <text class="detail-key">日期</text>
+      <text class="detail-val">{{record.happened_at ? record.happened_at.slice(0,10) : ''}}</text>
+    </view>
+    <view class="detail-row">
+      <text class="detail-key">录入方式</text>
+      <text class="detail-val">{{inputMethodLabel}}</text>
+    </view>
+    <view class="detail-row" wx:if="{{record.parse_status === 1}}">
+      <text class="detail-key">解析状态</text>
+      <text class="detail-val parse-pending">解析中...</text>
+    </view>
+  </view>
+
+  <!-- 编辑表单 -->
+  <view class="detail-card card" wx:if="{{editing}}">
+    <view class="edit-row">
+      <text class="field-label">金额</text>
+      <input class="edit-input" type="digit" value="{{editData.amount}}" bindinput="onEditAmount" />
+    </view>
+    <view class="edit-row">
+      <text class="field-label">分类</text>
+      <input class="edit-input" value="{{editData.category}}" placeholder="如：餐饮" bindinput="onEditCategory" />
+    </view>
+    <view class="edit-row">
+      <text class="field-label">备注</text>
+      <input class="edit-input" value="{{editData.note}}" placeholder="选填" bindinput="onEditNote" />
+    </view>
+    <view class="edit-row">
+      <text class="field-label">日期</text>
+      <picker mode="date" value="{{editData.happened_at}}" bindchange="onEditDate">
+        <view class="date-picker-val">{{editData.happened_at}} ›</view>
+      </picker>
+    </view>
+    <view class="edit-row">
+      <text class="field-label">类型</text>
+      <view class="type-switch">
+        <view class="type-opt {{editData.type === 2 ? 'active expense' : ''}}" bindtap="onEditType" data-type="2">支出</view>
+        <view class="type-opt {{editData.type === 1 ? 'active income' : ''}}" bindtap="onEditType" data-type="1">收入</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-area">
+    <view wx:if="{{!editing}}">
+      <button class="btn-edit" bindtap="startEdit">编辑</button>
+      <button class="btn-delete" bindtap="onDelete" loading="{{deleting}}">删除</button>
+    </view>
+    <view wx:if="{{editing}}" class="edit-actions">
+      <button class="btn-cancel" bindtap="cancelEdit">取消</button>
+      <button class="btn-save" bindtap="onSave" loading="{{saving}}">保存</button>
+    </view>
+  </view>
+</view>
+
+<view class="loading-page" wx:if="{{!record && loading}}">
+  <text>加载中...</text>
+</view>

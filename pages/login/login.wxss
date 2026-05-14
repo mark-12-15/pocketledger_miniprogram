@@ -1,0 +1,141 @@
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #4F46E5 0%, #7C3AED 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.login-bg {
+  height: 40vh;
+}
+
+.login-content {
+  flex: 1;
+  background: #f5f5f5;
+  border-radius: 48rpx 48rpx 0 0;
+  padding: 60rpx 48rpx 80rpx;
+}
+
+.logo-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60rpx;
+}
+
+.logo-icon {
+  font-size: 96rpx;
+}
+
+.logo-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-top: 16rpx;
+}
+
+.logo-sub {
+  font-size: 26rpx;
+  color: #999;
+  margin-top: 12rpx;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 48rpx 40rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.08);
+}
+
+.form-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8rpx;
+}
+
+.form-sub {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+}
+
+.input-group {
+  margin-bottom: 24rpx;
+}
+
+.input {
+  width: 100%;
+  height: 88rpx;
+  background: #f8f8f8;
+  border-radius: 16rpx;
+  padding: 0 28rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.code-group {
+  display: flex;
+  gap: 16rpx;
+}
+
+.code-input {
+  flex: 1;
+  width: auto;
+}
+
+.btn-send-code {
+  width: 220rpx;
+  height: 88rpx;
+  background: #EEF2FF;
+  color: #4F46E5;
+  border-radius: 16rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.btn-send-code::after { border: none; }
+
+.btn-wx {
+  width: 100%;
+  height: 96rpx;
+  background: #07C160;
+  color: #fff;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  border: none;
+}
+
+.btn-wx::after { border: none; }
+
+.btn-wx-icon {
+  font-size: 32rpx;
+}
+
+.btn-primary {
+  width: 100%;
+  height: 88rpx;
+  background: #4F46E5;
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin-top: 16rpx;
+}
+
+.btn-primary::after { border: none; }
