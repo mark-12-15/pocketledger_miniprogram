@@ -423,6 +423,17 @@
 .confirm-type-opt.active.expense { background: #FF6B6B; }
 .confirm-type-opt.active.income  { background: #07C160; }
 
+/* ── 非本月日期提示 ── */
+.date-warn {
+  margin-top: 16rpx;
+  padding: 16rpx 20rpx;
+  background: #FEF9EE;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #E67E22;
+  line-height: 1.5;
+}
+
 /* ── 解析状态 ── */
 .parse-status {
   margin-top: 24rpx;

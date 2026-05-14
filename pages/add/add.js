@@ -217,13 +217,15 @@ Page({
           const { parse_status, type, amount, category, note, happened_at } = res.data
           if (parse_status === 2) {
             clearInterval(timer)
-            // 用用户选的收/支类型，不采用 GLM 判断
             const userType = this.data.type
             const confirmCategories = userType === 1 ? INCOME_CATEGORIES : EXPENSE_CATEGORIES
+            const now = new Date()
+            const currentYM = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+            const notCurrentMonth = !happened_at || !happened_at.startsWith(currentYM)
             this.setData({
               parseMessage: '',
               showConfirm: true,
-              confirmData: { type: userType, amount: String(amount), category, note: note || '', happened_at },
+              confirmData: { type: userType, amount: String(amount), category, note: note || '', happened_at, notCurrentMonth },
               categories: confirmCategories
             })
           } else if (parse_status === 3) {
@@ -244,7 +246,13 @@ Page({
     this.setData({ 'confirmData.note': e.detail.value })
   },
   onConfirmDateChange(e) {
-    this.setData({ 'confirmData.happened_at': e.detail.value })
+    const val = e.detail.value
+    const now = new Date()
+    const currentYM = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+    this.setData({
+      'confirmData.happened_at': val,
+      'confirmData.notCurrentMonth': !val.startsWith(currentYM)
+    })
   },
   onConfirmTypeChange(e) {
     const type = Number(e.currentTarget.dataset.type)

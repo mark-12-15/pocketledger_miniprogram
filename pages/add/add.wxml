@@ -138,6 +138,9 @@
       <picker mode="date" value="{{confirmData.happened_at}}" bindchange="onConfirmDateChange">
         <view class="field-input date-picker-val">{{confirmData.happened_at}} ›</view>
       </picker>
+      <view class="date-warn" wx:if="{{confirmData.notCurrentMonth}}">
+        ⚠️ 此账单日期不在本月，入账后需切换月份才能在账单页看到
+      </view>
     </view>
 
     <!-- 确认入账按钮（inline，不用 fixed，避免滚动后触摸区域偏移） -->
