@@ -176,7 +176,11 @@
         <text class="voice-icon">🎙️</text>
         <text class="voice-tip">{{recording ? '松开结束' : '按住说话'}}</text>
       </view>
-      <text class="voice-sub">说出金额和用途，如"午饭花了35块"</text>
+      <text class="voice-sub">说出金额和用途，如"昨天午饭花了35块"</text>
+      <view class="voice-recognized" wx:if="{{voiceText}}">
+        <text class="voice-recognized-label">识别内容：</text>
+        <text class="voice-recognized-text">{{voiceText}}</text>
+      </view>
     </view>
     <view class="parse-status {{parseStatusClass}}" wx:if="{{parseMessage}}">{{parseMessage}}</view>
   </view>

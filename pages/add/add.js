@@ -30,6 +30,7 @@ Page({
     parseMessage: '',
     parseStatusClass: '',
     recording: false,
+    voiceText: '',
     recordId: null,
     pollTimer: null,
     // AI 解析确认
@@ -313,20 +314,56 @@ Page({
     }
   },
 
-  // 语音录制
+  // 语音录制（使用微信内置 ASR 转写，转写完毕后发文字稿给后端解析）
   onVoiceStart() {
-    const rm = wx.getRecorderManager()
-    rm.start({ duration: 60000, format: 'aac' })
-    this.recorderManager = rm
-    this.setData({ recording: true, parseMessage: '', parseStatusClass: '' })
-    rm.onStop((res) => {
-      this.setData({ recording: false })
-      this._uploadFile(res.tempFilePath, 'audio')
+    const recognizer = wx.createSpeechRecognizer()
+    this.recognizer = recognizer
+    this.setData({ recording: true, voiceText: '', parseMessage: '', parseStatusClass: '' })
+
+    recognizer.onRecognize(res => {
+      this.setData({ voiceText: res.result })
     })
+
+    recognizer.onStop(res => {
+      this.setData({ recording: false })
+      const text = res.result || this.data.voiceText
+      if (text && text.trim()) {
+        this._submitVoiceText(text.trim())
+      } else {
+        this.setData({ parseMessage: '未识别到内容，请重试', parseStatusClass: 'error' })
+      }
+    })
+
+    recognizer.onError(err => {
+      this.setData({ recording: false, parseMessage: '语音识别失败：' + (err.msg || '请重试'), parseStatusClass: 'error' })
+    })
+
+    recognizer.start({ lang: 'zh_CN', duration: 60000 })
   },
 
   onVoiceEnd() {
     if (!this.data.recording) return
-    this.recorderManager && this.recorderManager.stop()
-  }
+    this.recognizer && this.recognizer.stop()
+    this.setData({ recording: false })
+  },
+
+  async _submitVoiceText(text) {
+    this.setData({ parseMessage: '解析中，稍等...', parseStatusClass: 'pending' })
+    try {
+      const res = await app.request({
+        url: '/upload/voice-text',
+        method: 'POST',
+        data: { text }
+      })
+      if (res.code === 0) {
+        const recordId = res.data.id
+        this.setData({ recordId })
+        this._pollParseStatus(recordId)
+      } else {
+        this.setData({ parseMessage: res.message || '解析失败', parseStatusClass: 'error' })
+      }
+    } catch {
+      this.setData({ parseMessage: '网络错误，请重试', parseStatusClass: 'error' })
+    }
+  },
 })

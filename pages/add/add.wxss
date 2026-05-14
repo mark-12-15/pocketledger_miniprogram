@@ -376,6 +376,27 @@
   padding: 0 40rpx;
 }
 
+/* ── 语音识别实时文字 ── */
+.voice-recognized {
+  margin-top: 24rpx;
+  padding: 20rpx 24rpx;
+  background: #F0F4FF;
+  border-radius: 16rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+.voice-recognized-label {
+  font-size: 22rpx;
+  color: #95A5A6;
+  display: block;
+  margin-bottom: 8rpx;
+}
+.voice-recognized-text {
+  font-size: 28rpx;
+  color: #2C3E50;
+  line-height: 1.5;
+}
+
 /* ── AI 确认表单 ── */
 .confirm-banner {
   display: flex;
