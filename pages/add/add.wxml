@@ -1,5 +1,10 @@
 <view class="record-page">
 
+  <!-- 本月财务上下文 -->
+  <view class="month-context">
+    <text class="month-context-text">本月支出 ¥{{monthExpense}}　·　收入 ¥{{monthIncome}}</text>
+  </view>
+
   <!-- 顶部类型 Tab -->
   <view class="type-bar">
     <view class="type-tab {{type === 2 ? 'active' : ''}}" bindtap="setType" data-type="2">支出</view>

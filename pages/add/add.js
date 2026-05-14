@@ -33,13 +33,35 @@ Page({
     recordId: null,
     pollTimer: null,
     // AI 解析确认
-    showConfirm: false,   // 是否显示确认表单
-    confirmData: null,    // AI 解析结果 { type, amount, category, note, happened_at }
-    confirming: false     // 确认提交中
+    showConfirm: false,
+    confirmData: null,
+    confirming: false,
+    // 本月财务上下文
+    monthExpense: '0.00',
+    monthIncome: '0.00'
   },
 
   onLoad() {
     this.setData({ happenedAt: formatDate(new Date()) })
+  },
+
+  onShow() {
+    this._loadMonthSummary()
+  },
+
+  async _loadMonthSummary() {
+    try {
+      const now = new Date()
+      const res = await app.request({
+        url: `/records/summary?year=${now.getFullYear()}&month=${now.getMonth() + 1}`
+      })
+      if (res.code === 0) {
+        this.setData({
+          monthExpense: Number(res.data.expense || 0).toFixed(2),
+          monthIncome: Number(res.data.income || 0).toFixed(2)
+        })
+      }
+    } catch { /* 静默失败，不影响记账主流程 */ }
   },
 
   onUnload() {

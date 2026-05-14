@@ -1,33 +1,33 @@
 {
   "pages": [
     "pages/login/login",
-    "pages/index/index",
     "pages/add/add",
+    "pages/index/index",
     "pages/detail/detail"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#4F46E5",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FFFFFF",
     "navigationBarTitleText": "随手账本",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "black"
   },
   "tabBar": {
     "color": "#999999",
-    "selectedColor": "#4F46E5",
-    "backgroundColor": "#ffffff",
+    "selectedColor": "#4A60F6",
+    "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "账单",
-        "iconPath": "assets/tab-bill.png",
-        "selectedIconPath": "assets/tab-bill-active.png"
-      },
       {
         "pagePath": "pages/add/add",
         "text": "记账",
         "iconPath": "assets/tab-add.png",
         "selectedIconPath": "assets/tab-add-active.png"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "text": "账单",
+        "iconPath": "assets/tab-bill.png",
+        "selectedIconPath": "assets/tab-bill-active.png"
       }
     ]
   },
